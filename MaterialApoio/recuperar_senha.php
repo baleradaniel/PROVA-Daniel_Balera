@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         // Simula o envio de email
         simularEnvioEmail($email, $senha_temporaria);
-        echo "<script>alert('Uma senha temporaria foi enviada para o seu email (simulação). Verifique o arquivo emails_simulads.txt'); window.location.href = 'login.php';</script>";
+        echo "<script>alert('Uma senha temporaria foi enviada para o seu email (simulação). Verifique o arquivo emails_simulados.txt'); window.location.href = 'login.php';</script>";
 
     } else {
         echo "<script>alert('Email não encontrado.');</script>";
