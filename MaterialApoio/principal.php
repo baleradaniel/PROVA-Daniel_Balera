@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once 'conexao.php';
 
 if(!isset($_SESSION['usuario'])) {
@@ -8,7 +9,7 @@ if(!isset($_SESSION['usuario'])) {
 
 // Obtendo o nome do perfil do usuario logado
 $id_perfil = $_SESSION['perfil'];
-$sqlPerfil = "SELECT nome FROM perfil WHERE id_perfil = :id_perfil";
+$sqlPerfil = "SELECT nome_perfil FROM perfil WHERE id_perfil = :id_perfil";
 $stmtPerfil = $pdo->prepare($sqlPerfil);
 $stmtPerfil->bindParam(':id_perfil', $id_perfil);
 $stmtPerfil->execute();
@@ -60,5 +61,21 @@ $opcoes_menu = $permissoes[$id_perfil];
             </form>
         </div>
     </header>
+    <nav>
+        <ul class="menu">
+            <?php foreach($opcoes_menu as $categoria=>$arquivos):?>
+            <li class="dropdown">
+                <a href="#"><?= $categoria ?></a>
+                <ul class="dropdown-menu">
+                    <?php foreach($arquivos as $arquivo): ?>
+                        <li>
+                            <a href="<?=$arquivo?>"><?= ucfirst(str_replace("_"," ", basename($arquivo, ".php")))?></a>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
+            </li>
+            <?php endforeach; ?>
+        </ul>
+    </nav>
 </body>
 </html>
