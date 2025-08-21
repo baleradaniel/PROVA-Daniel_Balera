@@ -12,7 +12,7 @@ if ($_SESSION['perfil'] != 1) {
 $usuario = null;
 
 // Se o formulário for enviado, busca o usuário pelo ID ou nome
-if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST['busca'])) {
+if ($_SERVER["REQUEST_METHOD"] == "POST") 
     if (!empty($_POST['busca_usuario'])) {
         $busca = trim($_POST['busca_usuario']);
 
@@ -31,10 +31,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST['busca'])) {
 
         // Se não encontrar o usuário, exibe mensagem
         if (!$usuario) {
-            echo "<script>alert('Usuário não encontrado.');</script>";
+            echo "<script>alert('Usuário não encontrado.');window.location.href='buscar_usuario.php'</script>";
         }
     }
-}
+
 ?>
 
 <!DOCTYPE html>
@@ -50,14 +50,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST['busca'])) {
 <body>
 <h2>Alterar Usuarios</h2>
     <!-- Formulário de busca -->
-    <form action="alterar_usuario.php" method="post">
+    <form action="alterar_usuario.php" method="POST">
         <label for="busca_usuario">Digite o ID ou Nome:</label>
         <input type="text" id="busca_usuario" name="busca_usuario" required onkeyup="buscarSugestoes()">
         <div id="sugestoes"></div>
         <button type="submit">Buscar</button>
     </form>
     <?php if ($usuario): ?>
-        <form action="processa_alteracao_usuario.php" method="post">
+        <form action="processa_alteracao_usuario.php" method="POST">
             <input type="hidden" name="id_usuario" value="<?= htmlspecialchars($usuario['id_usuario']) ?>">
 
             <label for="nome">Nome:</label>
@@ -76,8 +76,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST['busca'])) {
 
             <!-- Se o usuario logado for ADM, exibir opção de alterar senha -->
             <?php if ($_SESSION['perfil'] == 1): ?>
-                <label for="senha">Senha:</label>
-                <input type="password" id="senha" name="senha">
+                <label for="senha">Nova Senha:</label>
+                <input type="password" id="nova_senha" name="nova_senha">
             <?php endif; ?>
 
             <button type="submit">Alterar</button>
