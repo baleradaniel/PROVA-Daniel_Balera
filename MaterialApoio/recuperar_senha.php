@@ -3,7 +3,7 @@ session_start();
 require_once 'conexao.php';
 require_once 'funcoes_email.php'; // Arquivo com as funções que geram a senha e enviam o email
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
 
     // Verifica se o email existe no banco de dados

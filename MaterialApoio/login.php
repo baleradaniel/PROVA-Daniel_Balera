@@ -2,7 +2,7 @@
 session_start();
 require 'conexao.php';
 
-if($_SERVER['REQUEST_METHOD'] == 'POST') {
+if($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
     $senha = $_POST['senha'];
 
@@ -42,7 +42,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
 </head>
 <body>
     <h2>Login</h2>
-    <form action="login.php" method="post">
+    <form action="login.php" method="POST">
         <label for="email">Email:</label>
         <input type="email" id="email" name="email" required><br><br>
 

@@ -7,7 +7,7 @@ if ($_SESSION['perfil'] != 1) {
     exit();
 }
 
-if ($_SERVER['REQUEST_METHOD'] == "post") {
+if ($_SERVER['REQUEST_METHOD'] == "POST") {
     $id_usuario = $_POST['id_usuario'];
     $nome = $_POST['nome'];
     $email = $_POST['email'];
