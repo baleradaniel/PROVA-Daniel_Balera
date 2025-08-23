@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once 'conexao.php';
+require_once 'funcao_dropdown.php';
 
 // Verifica se o usuário tem permissão de Adm
 if ($_SESSION['perfil'] != 1) {
@@ -31,6 +32,8 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])){
         echo "<script>alert('Erro ao excluir o usuário.');</script>";
     }
 }
+
+menu_dropdown($pdo);
 ?>
 
 <!DOCTYPE html>
@@ -42,10 +45,27 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])){
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+<nav>
+        <ul class="menu">
+            <?php foreach ($opcoes_menu as $categoria => $arquivos): ?>
+                <li class="dropdown">
+                    <a href="#"><?= $categoria ?></a>
+                    <ul class="dropdown-menu">
+                        <?php foreach ($arquivos as $arquivo): ?>
+                            <li>
+                                <a href="<?= $arquivo ?>"><?= ucfirst(str_replace("_", " ", basename($arquivo, ".php"))) ?></a>
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+                </li>
+            <?php endforeach; ?>
+        </ul>
+    </nav>
     <h2>Excluir Usuario</h2>
 
     <?php if (!empty($usuarios)):?>
-        <table border="1">
+        <center>
+        <table class="tabela-usuarios">
             <tr>
                 <th>ID</th>
                 <th>Nome</th>
@@ -65,6 +85,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])){
                 </tr>
             <?php endforeach; ?>
         </table>
+        </center>
     <?php else: ?>
         <p>Nenhum usuário encontrado.</p>
     <?php endif; ?>

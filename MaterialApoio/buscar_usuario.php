@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once 'conexao.php';
+require_once 'funcao_dropdown.php';
 
 if ($_SESSION['perfil'] != 1 && $_SESSION['perfil'] != 2) {
     echo "<script>alert('Acesso negado. Você não tem permissão para acessar esta página.'); window.location.href='principal.php';</script>";
@@ -34,44 +35,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST['busca'])) {
 $stmt->execute();
 $usuarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-$id_perfil = $_SESSION['perfil'];
-$sqlPerfil = "SELECT nome_perfil FROM perfil WHERE id_perfil = :id_perfil";
-$stmtPerfil = $pdo->prepare($sqlPerfil);
-$stmtPerfil->bindParam(':id_perfil', $id_perfil);
-$stmtPerfil->execute();
-$perfil = $stmtPerfil->fetch(PDO::FETCH_ASSOC);
-$nome_perfil = $perfil['nome_perfil'];
+menu_dropdown($pdo);
 
-$permissoes = [
-    1 => [
-        "Cadastrar" => ["cadastro_usuario.php", "cadastro_perfil.php", "cadastro_cliente.php", "cadastro_fornecedor.php", "cadastro_produto.php", "cadastro_funcionario.php"],
-        "Buscar" => ["buscar_usuario.php", "buscar_perfil.php", "buscar_cliente.php", "buscar_fornecedor.php", "buscar_produto.php", "buscar_funcionario.php"],
-        "Alterar" => ["alterar_usuario.php", "alterar_perfil.php", "alterar_cliente.php", "alterar_fornecedor.php", "alterar_produto.php", "alterar_funcionario.php"],
-        "Excluir" => ["excluir_usuario.php", "excluir_perfil.php", "excluir_cliente.php", "excluir_fornecedor.php", "excluir_produto.php", "excluir_funcionario.php"]
-    ],
-
-    2 => [
-        "Cadastrar" => ["cadastro_cliente.php"],
-        "Buscar" => ["buscar_cliente.php", "buscar_fornecedor.php", "buscar_produto.php"],
-        "Alterar" => ["alterar_cliente.php", "alterar_fornecedor.php"]
-    ],
-
-    3 => [
-        "Cadastrar" => ["cadastro_fornecedor.php", "cadastro_produto.php"],
-        "Buscar" => ["buscar_cliente.php", "buscar_fornecedor.php", "buscar_produto.php"],
-        "Alterar" => ["alterar_fornecedor.php", "alterar_produto.php"],
-        "Excluir" => ["excluir_produto.php"]
-    ],
-
-    4 => [
-        "Cadastrar" => ["cadastro_cliente.php"],
-        "Buscar" => ["buscar_produto.php"],
-        "Alterar" => ["alterar_cliente.php"]
-    ],
-];
-
-// Obtendo as opções disponíveis para o perfil do usuário logado
-$opcoes_menu = $permissoes[$id_perfil];
 ?>
 
 <!DOCTYPE html>
@@ -111,28 +76,28 @@ $opcoes_menu = $permissoes[$id_perfil];
 
     <?php if (!empty($usuarios)): ?>
         <center>
-        <table class="tabela-usuarios">
-            <tr>
-                <th>ID</th>
-                <th>Nome</th>
-                <th>Email</th>
-                <th>Perfil</th>
-                <th>Ações</th>
-            </tr>
-            <?php foreach ($usuarios as $usuario): ?>
+            <table class="tabela-usuarios">
                 <tr>
-                    <td><?= htmlspecialchars($usuario['id_usuario']) ?></td>
-                    <td><?= htmlspecialchars($usuario['nome']) ?></td>
-                    <td><?= htmlspecialchars($usuario['email']) ?></td>
-                    <td><?= htmlspecialchars($usuario['id_perfil']) ?></td>
-                    <td>
-                        <a href="alterar_usuario.php?id=<?= htmlspecialchars($usuario['id_usuario']) ?>">Alterar</a>
-                        <a href="excluir_usuario.php?id=<?= htmlspecialchars($usuario['id_usuario']) ?>"
-                            onclick="return confirm('Tem certeza que deseja excluir este usuario?')">Excluir</a>
-                    </td>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Email</th>
+                    <th>Perfil</th>
+                    <th>Ações</th>
                 </tr>
-            <?php endforeach; ?>
-        </table>
+                <?php foreach ($usuarios as $usuario): ?>
+                    <tr>
+                        <td><?= htmlspecialchars($usuario['id_usuario']) ?></td>
+                        <td><?= htmlspecialchars($usuario['nome']) ?></td>
+                        <td><?= htmlspecialchars($usuario['email']) ?></td>
+                        <td><?= htmlspecialchars($usuario['id_perfil']) ?></td>
+                        <td>
+                            <a href="alterar_usuario.php?id=<?= htmlspecialchars($usuario['id_usuario']) ?>">Alterar</a>
+                            <a href="excluir_usuario.php?id=<?= htmlspecialchars($usuario['id_usuario']) ?>"
+                                onclick="return confirm('Tem certeza que deseja excluir este usuario?')">Excluir</a>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </table>
         </center>
         <br>
         <br>

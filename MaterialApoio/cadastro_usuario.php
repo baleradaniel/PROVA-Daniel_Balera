@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once 'conexao.php';
+require_once 'funcao_dropdown.php';
 
 // Verifica se o usuário tem permissão para acessar a página
 // Supondo que o perfil 1 seja o administrador
@@ -29,44 +30,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "<script>alert('Erro ao cadastrar usuário. Tente novamente.');</script>";
     }
 }
-$id_perfil = $_SESSION['perfil'];
-$sqlPerfil = "SELECT nome_perfil FROM perfil WHERE id_perfil = :id_perfil";
-$stmtPerfil = $pdo->prepare($sqlPerfil);
-$stmtPerfil->bindParam(':id_perfil', $id_perfil);
-$stmtPerfil->execute();
-$perfil = $stmtPerfil->fetch(PDO::FETCH_ASSOC);
-$nome_perfil = $perfil['nome_perfil'];
 
-$permissoes = [
-    1 => [
-        "Cadastrar" => ["cadastro_usuario.php", "cadastro_perfil.php", "cadastro_cliente.php", "cadastro_fornecedor.php", "cadastro_produto.php", "cadastro_funcionario.php"],
-        "Buscar" => ["buscar_usuario.php", "buscar_perfil.php", "buscar_cliente.php", "buscar_fornecedor.php", "buscar_produto.php", "buscar_funcionario.php"],
-        "Alterar" => ["alterar_usuario.php", "alterar_perfil.php", "alterar_cliente.php", "alterar_fornecedor.php", "alterar_produto.php", "alterar_funcionario.php"],
-        "Excluir" => ["excluir_usuario.php", "excluir_perfil.php", "excluir_cliente.php", "excluir_fornecedor.php", "excluir_produto.php", "excluir_funcionario.php"]
-    ],
+menu_dropdown($pdo);
 
-    2 => [
-        "Cadastrar" => ["cadastro_cliente.php"],
-        "Buscar" => ["buscar_cliente.php", "buscar_fornecedor.php", "buscar_produto.php"],
-        "Alterar" => ["alterar_cliente.php", "alterar_fornecedor.php"]
-    ],
-
-    3 => [
-        "Cadastrar" => ["cadastro_fornecedor.php", "cadastro_produto.php"],
-        "Buscar" => ["buscar_cliente.php", "buscar_fornecedor.php", "buscar_produto.php"],
-        "Alterar" => ["alterar_fornecedor.php", "alterar_produto.php"],
-        "Excluir" => ["excluir_produto.php"]
-    ],
-
-    4 => [
-        "Cadastrar" => ["cadastro_cliente.php"],
-        "Buscar" => ["buscar_produto.php"],
-        "Alterar" => ["alterar_cliente.php"]
-    ],
-];
-
-// Obtendo as opções disponíveis para o perfil do usuário logado
-$opcoes_menu = $permissoes[$id_perfil];
 ?>
 
 <!DOCTYPE html>
@@ -80,7 +46,7 @@ $opcoes_menu = $permissoes[$id_perfil];
 </head>
 
 <body>
-    <nav>
+<nav>
         <ul class="menu">
             <?php foreach ($opcoes_menu as $categoria => $arquivos): ?>
                 <li class="dropdown">
